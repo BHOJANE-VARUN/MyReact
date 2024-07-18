@@ -9,7 +9,7 @@ const Card = ({ dat }) => {
           dat.cloudinaryImageId
         }
       />
-      <h3>{dat.name}</h3>
+      <h3><strong>{dat.name}</strong></h3>
       <h4>{dat.cuisines.join(", ")}</h4>
       <h4>{dat.avgRating} Star</h4>
       <h4>{dat.sla.deliveryTime} minutes</h4>
