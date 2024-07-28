@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import Heading from "./src/components/Heading";
 import Body from "./src/components/Body.js";
@@ -6,9 +6,9 @@ import {createBrowserRouter,RouterProvider,Outlet} from "react-router-dom";
 import Contact from "./src/components/Contact_us.js";
 import Error from "./src/components/Error.js";
 import Resturant from "./src/components/Resturant.js";
-import Aboutus from "./src/components/Aboutus.js";
-
+const Aboutus = lazy(()=> import("./src/components/Aboutus.js"));
 const App = ()=>{
+  
   return (<div className="app">
     <Heading/>
     <Outlet/>  
@@ -35,7 +35,7 @@ const Route = createBrowserRouter([
       },
       {
         path:"/aboutus",
-        element:<Aboutus/>
+        element:<Suspense fallback={<h1>Loading...</h1>}><Aboutus/></Suspense>
       }
     ]
   },

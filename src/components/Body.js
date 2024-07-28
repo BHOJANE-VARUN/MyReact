@@ -1,83 +1,81 @@
 import { Link } from "react-router-dom";
-import Card from "./Card";
+import {Card , proCard} from "./Card";
 import Shrimmer from "./ShrimmerUI";
 import { useEffect, useState } from "react";
 import useOnline from "../utils/useOnlineStatus";
+import useCards from "../utils/useCards";
 
 const Body = () => {
-  const [Resturantslist, setResturants] = useState([]);
   const [Search, setSearch] = useState("");
-
-  useEffect(() => {
-    fetchdata();
-  }, []);
-
-  const fetchdata = async () => {
-    const raw = await fetch(
-      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=19.0759837&lng=72.8776559&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
-    );
-    const jsodata = await raw.json();
-    const posdata =
-      jsodata.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
-        ?.restaurants;
-    setResturants(posdata);
-  };
-
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+  const Resturantslist = useCards();
   const status = useOnline();
+  const Procard = proCard(Card);
+  useEffect(() => {
+    if (Resturantslist) {
+      setFilteredRestaurants(Resturantslist);
+    }
+  }, [Resturantslist]);
 
   if (!status) {
     return <h1>Sorry, you went offline. Please check your internet connection.</h1>;
   }
-
-  if (Resturantslist.length === 0) {
+  if (Resturantslist === null) {
     return <Shrimmer />;
   }
 
+  const handleTopRatedClick = () => {
+    setFilteredRestaurants(Resturantslist.filter(res => res.info.avgRating > 4));
+  };
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const handleSearchClick = () => {
+    setFilteredRestaurants(Resturantslist.filter(datam =>
+      datam.info.name.toLowerCase().includes(Search.toLowerCase())
+    ));
+  };
   return (
-    <div id="main">
+    <div className="">
       <div className="buttons">
         <button
           id="btn"
-          onClick={() => {
-            const filterlist = Resturantslist.filter(
-              (res) => res.info.avgRating > 4
-            );
-            setResturants(filterlist);
-          }}
+          className="text-white bg-blue-100 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-5"
+          onClick={handleTopRatedClick}
         >
           Top Rated Restaurants
         </button>
+        <br></br>
         <input
           type="text"
           id="textsearch"
-          className="search"
-          value={Search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-          }}
+          className="border border-black m-4 rounded-2xl w-64 h-11"
+          placeholder=" What's greaving?"
+          onChange={handleSearchChange}
         />
         <button
           id="srhbtn"
-          onClick={() => {
-            const btn = document.getElementById("textsearch");
-            setSearch(btn.value);
-          }}
+          className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-950 hover:bg-gray-200 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+          onClick={handleSearchClick}
         >
           Search
         </button>
       </div>
-      <div id="Cardcollect">
-        {Resturantslist.filter((datam) => {
+      <div className="flex flex-wrap">
+        {filteredRestaurants.filter((datam) => {
           if (Search.length === 0) {
             return true;
           } else {
             return datam.info.name.toLowerCase().includes(Search.toLowerCase());
           }
         }).map((datam) => (
-          <Link className="anchor" key={datam.info.id} to={"/resturant/" + datam.info.id}>
-            <Card dat={datam.info} />
+          <Link className="h-1/4 w-1/4 p-10" key={datam.info.id} to={"/resturant/" + datam.info.id}>
+            {datam.info.avgRating>4.5?<Procard datm={datam.info} /> :<Card dat={datam.info} />}      
           </Link>
-        ))}
+        ))
+        }
       </div>
     </div>
   );

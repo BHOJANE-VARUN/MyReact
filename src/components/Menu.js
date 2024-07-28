@@ -1,21 +1,19 @@
+import Nestedcategory from "./Nestedcategory";
 const Menu = ({ dataobj }) => {
   const cards = dataobj?.data?.cards;
   const itemCards = cards?.[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards?.[1]?.card?.card?.itemCards;
-
+  let listme = (cards?.[4]?.groupedCard?.cardGroupMap?.REGULAR.cards).filter((data)=>{
+    return  data.card.card["@type"] === "type.googleapis.com/swiggy.presentation.food.v2.NestedItemCategory";
+  })
+  console.log(listme);
   if (!Array.isArray(itemCards)) {
     return <div>No menu items available</div>;
   }
 
   return (
     <div>
-      <h1>{dataobj?.data?.cards?.[0]?.card?.card?.text || 'No title available'}</h1>
-      <h2>Menu</h2>
-      <ul>
-        {itemCards.map((obj, index) => (
-          <li key={index}>{obj?.card?.info?.name || 'Unnamed item'}</li>
-        ))}
-      </ul>
-    </div>
+      <Nestedcategory/>
+  </div>
   );
 };
 
