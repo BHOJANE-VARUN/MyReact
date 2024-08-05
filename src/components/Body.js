@@ -41,6 +41,7 @@ const Body = () => {
     <div className="">
       <div className="buttons">
         <button
+          data-testid = {"filter"}
           id="btn"
           className="text-white bg-blue-100 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-5"
           onClick={handleTopRatedClick}
@@ -49,6 +50,7 @@ const Body = () => {
         </button>
         <br></br>
         <input
+          data-testid = {"search"}
           type="text"
           id="textsearch"
           className="border border-black m-4 rounded-2xl w-64 h-11"
@@ -56,6 +58,7 @@ const Body = () => {
           onChange={handleSearchChange}
         />
         <button
+          data-testid="butt"
           id="srhbtn"
           className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-950 hover:bg-gray-200 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
           onClick={handleSearchClick}
@@ -71,7 +74,7 @@ const Body = () => {
             return datam.info.name.toLowerCase().includes(Search.toLowerCase());
           }
         }).map((datam) => (
-          <Link className="h-1/4 w-1/4 p-10" key={datam.info.id} to={"/resturant/" + datam.info.id}>
+          <Link data-testid={"res"} className="h-1/4 w-1/4 p-10" key={datam.info.id} to={"/resturant/" + datam.info.id}>
             {datam.info.avgRating>4.5?<Procard datm={datam.info} /> :<Card dat={datam.info} />}      
           </Link>
         ))

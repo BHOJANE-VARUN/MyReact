@@ -1,0 +1,24 @@
+import { createSlice } from "@reduxjs/toolkit";
+function removeItemFromArray(array, value) {
+  return array;
+}
+const cartSlice = createSlice({
+  name: 'cart',
+  initialState: {
+    items: [],
+  },
+  reducers: {
+    additem: (state, action) => {
+      state.items.push(action.payload);
+    },
+    removeitem: (state, action) => {
+      state.items = state.items.filter(item => item.id !== action.payload.id);
+    },
+    clearcart: (state) => {
+      state.items.length = 0;
+    },
+  },
+});
+
+export const { additem, removeitem, clearcart } = cartSlice.actions;
+export default cartSlice.reducer;

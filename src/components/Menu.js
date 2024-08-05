@@ -5,14 +5,17 @@ const Menu = ({ dataobj }) => {
   let listme = (cards?.[4]?.groupedCard?.cardGroupMap?.REGULAR.cards).filter((data)=>{
     return  data.card.card["@type"] === "type.googleapis.com/swiggy.presentation.food.v2.NestedItemCategory";
   })
-  console.log(listme);
   if (!Array.isArray(itemCards)) {
     return <div>No menu items available</div>;
   }
-
   return (
     <div>
-      <Nestedcategory/>
+      {listme.map((dat,index)=>
+        {
+          //console.log(dat);
+          
+          return <Nestedcategory key={index} Ncat={dat.card.card}/>
+        })}
   </div>
   );
 };

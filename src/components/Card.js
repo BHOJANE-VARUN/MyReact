@@ -1,5 +1,7 @@
 import { CDN_URL } from "../utils/constants";
 export const Card = ({ dat }) => {
+  //console.log(dat);
+  
   return (
     <div className="flex-col hover:shadow-2xl items-center rounded-xl shadow-sm h-fit w-60 bg-gray-50">
       <img
